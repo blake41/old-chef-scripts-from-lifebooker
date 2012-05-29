@@ -1,0 +1,5 @@
+check process delayed_job_assigner
+  with pidfile /var/www/bb/lifebooker/tmp/pids/async_server_daemon.pid
+  start program = "/bin/su - bb -c cd '/var/www/bb/lifebooker/bin && bundle exec ruby start_calendar_task_daemon.rb start -- -e <% @node[:monit][:environment] %>'"
+  stop program = '/bin/cat /var/www/bb/lifebooker/tmp/pids/async_server_daemon.pid | xargs kill -INT'
+  if 5 restarts within 5 cycles then timeout

@@ -1,0 +1,6 @@
+check process redis
+  with pidfile /var/run/redis_6379.pid
+  start program = "/bin/su -c 'service redis6379 start'"
+  stop program = "/bin/su -c 'service redis6379 stop'"
+  if 5 restarts within 5 cycles then timeout
+

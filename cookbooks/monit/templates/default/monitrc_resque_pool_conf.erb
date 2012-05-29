@@ -1,0 +1,6 @@
+check process resque_pool
+  with pidfile <%= @node[:monit][:base_path] %>/tmp/pids/resque-pool.pid
+  start program = "/bin/su - bb -c 'cd /var/www/bb/recommendations_api && bundle exec resque-pool --daemon --environment staging'"
+  stop program = "/bin/cat /var/www/bb/recommendations_api/tmp/pids/resque-pool.pid | xargs kill -INT"
+  if 5 restarts within 5 cycles then timeout
+

@@ -1,0 +1,7 @@
+set eventqueue basedir /var/monit slots 100
+set daemon 120
+set mmonit http://monit:monit@50.19.236.91:8080/collector
+set httpd port 2812
+  allow admin:monit
+set logfile syslog facility log_daemon
+include /etc/monit.d/*

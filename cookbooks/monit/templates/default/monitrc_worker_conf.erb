@@ -1,0 +1,12 @@
+<% @node[:monit][:workers].each do |worker| %>
+    <% worker[:number].to_i.times do |i| %>
+      <% i + worker[:start].to_i %>
+      <% worker_name = worker[:name] + "-" + i.to_s %>
+      check process <%= worker_name %>
+      with pidfile <%= @node[:monit][:base_path] %><%= worker[:path] %>/tmp/pids/<%= worker_name %>_worker_<%= @node[:monit][:environment] %>.pid
+      start program = "/bin/su - bb -c 'cd <%= @node[:monit][:base_path] %><%= worker[:path] %>/bin && bundle exec ruby start_async_worker.rb start -- -e <%= @node[:monit][:environment] %> -q <%= worker_name %> <%= worker[:type] %>'"
+      stop program = "/bin/su - bb -c 'cd <%= @node[:monit][:base_path] %><%= worker[:path] %>/bin && bundle exec ruby start_async_worker.rb stop -- -e <%= @node[:monit][:environment] %> -q <%= worker_name %>'"
+      if 5 restarts within 5 cycles then timeout
+
+    <% end %>
+<% end %>
