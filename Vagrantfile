@@ -43,7 +43,7 @@ Vagrant::Config.run do |config|
     #chef.add_recipe "mysql"
     chef.json = {
       :monit => {
-        :services => ["resque_pool", "apache2", "memcached", "redis"],
+        :services => ["resque_pool", "apache2", "memcached", "redis", "delayed_job_assigner"],
         :workers => [{:name => "loot", :path => "/lifebooker", :type => "-y serial", :number => 3, :start => 1}, {:name => "search", :path => "/search", :type => nil, :number => 2, :start => 4}],
         :base_path => "/var/www/bb",
         :environment => "staging"

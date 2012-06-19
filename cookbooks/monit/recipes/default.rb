@@ -7,6 +7,11 @@
 # All rights reserved - Do Not Redistribute
 #
 
+# install sendmail so that monit can send us alert emails
+package "sendmail" do
+  action :install
+end
+
 remote_file "/tmp/monit.tar.gz" do
   source "http://mmonit.com/monit/dist/binary/5.4/monit-5.4-linux-x64.tar.gz"
   notifies :run, "bash[install_monit]", :immediately
@@ -50,12 +55,22 @@ if !node[:monit].nil? && !node[:monit][:services].nil?
     end
   end
 end
-#create worker config file
-template "/etc/monit.d/workers_conf" do
+
+if !node[:monit].nil? && !node[:monit][:workers].nil?
+  #create worker config file
+  template "/etc/monit.d/workers_conf" do
+    owner "root"
+    group "root"
+    mode 0700
+    source "monitrc_worker_conf.erb"
+  end
+end
+
+template "/etc/monit.d/check_disk_conf" do
   owner "root"
   group "root"
   mode 0700
-  source "monitrc_worker_conf.erb"
+  source "check_disk_conf.erb"
 end
 
 template "/etc/monitrc" do
@@ -66,8 +81,7 @@ template "/etc/monitrc" do
 end
 
 service "monit" do
-  action :start
-  enabled true
+  action [:start]
   start_command "/var/run/monit-5.4/bin/monit"
 end
 

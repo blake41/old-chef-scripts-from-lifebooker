@@ -26,7 +26,6 @@ bash "install_mmonit" do
 end
 
 service "mmonit" do
-  action :start
-  enabled true
+  action [:start]
   start_command "/var/run/mmonit-2.4/bin/mmonit"
 end

@@ -1,5 +1,5 @@
 check process penguin_assigner
-  with pidfile <% @node[:monit][:base_path] %>/search_api/tmp/pids/penguin_assigner_<% @node[:monit][:environment] %>.pid
-  start program = "/bin/su - bb -c 'cd /var/www/bb/search_api/bin && bundle exec ruby start_async_assigner.rb start -- -e <% @node[:monit][:environment] %>'"
-  stop program = "/bin/su - bb -c 'cd /var/www/bb/search_api/bin && bundle exec ruby start_async_assigner.rb stop -- -e <% @node[:monit][:environment] %>'"
+  with pidfile <%= @node[:monit][:base_path] %>/search_api/tmp/pids/penguin_assigner_<%= @node[:monit][:environment] %>.pid
+  start program = "/bin/su - bb -c 'cd <%= @node[:monit][:base_path] %>/search_api/bin && bundle exec ruby start_async_assigner.rb start -- -e <%= @node[:monit][:environment] %>'"
+  stop program = "/bin/su - bb -c 'cd <%= @node[:monit][:base_path] %>/search_api/bin && bundle exec ruby start_async_assigner.rb stop -- -e <%= @node[:monit][:environment] %>'"
   if 5 restarts within 5 cycles then timeout
